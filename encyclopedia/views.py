@@ -26,3 +26,17 @@ def displayEntry(request, title):
             "title": title,
             "content": content
         })
+
+def search(request):
+    if request.method == "POST":
+        searchTitle = request.POST['input']
+        searchContent = conversionMDtoHTML(searchTitle)
+        if searchContent == None:
+            return render(request,"encyclopedia/pageNotFound.html")
+        else:
+            return render(request, "encyclopedia/entry.html",{
+                "title": searchTitle,
+                "content": searchContent
+        })
+        
+    
