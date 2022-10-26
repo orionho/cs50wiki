@@ -1,0 +1,16 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block body %}
+    <h1>Search Error</h1>
+
+    <p>Page not found, please see below for similar entries</p>
+    <ul>
+        {% for entry in possibleEntries %}
+            <li><a href = "{% url 'showEntry' title=entry %}">{{entry}}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
