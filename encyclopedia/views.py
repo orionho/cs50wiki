@@ -8,22 +8,24 @@ from django.http import HttpResponseRedirect
 from django.urls import is_valid_path
 from django import forms
 from django.db import models
+import random
 
 
-class newEntry(models.Model):
-        title = models.CharField(max_length=255)
-        content = models.TextField()
+#class newEntry(models.Model):
+    #title = models.CharField(max_length=25)
+    #content = models.TextField()
 
-class newEntryForm(forms.ModelForm):
-    class Meta:
-        model = newEntry
-        fields = ('title', 'content')
+#class newEntryForm(forms.Form):
+    #title = forms.CharField()
+    #content = forms.CharField()
+    #class Meta:
+        #model = newEntry
+        #fields = ('title', 'content')
 
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'content': forms.Textarea(attrs={'class': 'form-control'}),
-        }
-
+       # widgets = {
+           # 'title': forms.TextInput(attrs={'class': 'form-control'}),
+           # 'content': forms.Textarea(attrs={'class': 'form-control'}),
+        #}
     
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -68,12 +70,40 @@ def search(request):
         })
 
 def newPage(request):
-    if request.method == "POST":
-        form = newEntryForm(request.POST)
-        util.save_entry(request.POST['title'],request.POST['content'])
-         
+    if request.method == "GET":
+        return render(request, "encyclopedia/addEntry.html") 
 
-    return render(request, "encyclopedia/addEntry.html", {
-        "form": newEntryForm()
-    })
-    
+    else:
+        #form = newEntryForm(request.POST)
+        util.save_entry(request.POST['title'],request.POST['content'])
+        html_content = conversionMDtoHTML(request.POST['title'])
+        return render(request, "encyclopedia/entry.html",{
+                "title": request.POST['title'],
+                "content": html_content
+        })
+
+def editPage(request):
+    if request.method == "GET":
+        html_content = util.get_entry(request.GET['title'])
+        return render(request, "encyclopedia/editPage.html", {
+                "title": request.GET['title'],
+                "content": html_content
+        })
+
+    else:
+        #form = newEntryForm(request.POST)
+        util.save_entry(request.POST['title'],request.POST['content'])
+        html_content = conversionMDtoHTML(request.POST['title'])
+        return render(request, "encyclopedia/entry.html",{
+                "title": request.POST['title'],
+                "content": html_content
+        })
+
+def randomPage(request):
+    entries = util.list_entries()
+    entryTitle = random.choice(entries)
+    html_content = conversionMDtoHTML(entryTitle)
+    return render(request, "encyclopedia/entry.html",{
+                "title": entryTitle,
+                "content": html_content
+        })

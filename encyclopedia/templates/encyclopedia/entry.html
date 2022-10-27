@@ -6,5 +6,9 @@
 
 {% block body %}
     {{content | safe}}
-
+    <form action= "{% url 'editPage' %}" method ="GET">
+        {% csrf_token %}
+        <input type = "hidden" name = "title" value="{{ title }}">
+        <input type="submit" value="Edit">
+    </form>
 {% endblock %}  

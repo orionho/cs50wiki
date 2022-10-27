@@ -1,3 +1,0 @@
-# beef
-
-hey there delilah
