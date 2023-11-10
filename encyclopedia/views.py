@@ -102,8 +102,8 @@ def editPage(request):
 def randomPage(request):
     entries = util.list_entries()
     entryTitle = random.choice(entries)
-    html_content = conversionMDtoHTML(entryTitle)
+    content = conversionMDtoHTML(entryTitle)
     return render(request, "encyclopedia/entry.html",{
                 "title": entryTitle,
-                "content": html_content
+                "content": content
         })
